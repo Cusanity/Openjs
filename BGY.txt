@@ -41,8 +41,8 @@ function ai(){
     //         i=i+1;
     //     }
     // }
-    let allNames="test:";
     let downloadLinks=[];
+    let allNames="";
     const as = document.getElementsByTagName("a");
     for (let i=0;i<as.length;i++){
         if (as[i].innerText==="下载"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="流程说明"){
@@ -50,7 +50,7 @@ function ai(){
             // console.log(currentText);
             // console.log(allNames);
             // console.log(allNames.search(currentText));
-            if (allNames.indexOf(currentText)===-1){
+            if (allNames.indexOf(currentText)===-1||allNames.indexOf("阅读")!==-1){
                 console.log(allNames.indexOf(currentText));
                 allNames+=textBeforeDownload(NodeBeforeDownload(as[i]))+" ";
                 console.log(allNames);
@@ -63,7 +63,7 @@ function ai(){
         window.alert("未发现下载按钮");
     }
     else {
-        let sentence='是否下载'+downloadLinks.length;
+        let sentence='是否下载 '+downloadLinks.length+' 个文件';
         let r = confirm(sentence);
         if (r === true) {
             for (let i=0;i<downloadLinks.length;i++){
@@ -87,3 +87,4 @@ function keyDown(e) {
     }
 }
 document.onkeydown = keyDown;
+
