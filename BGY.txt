@@ -1,0 +1,62 @@
+// ==UserScript==
+// @name        New script - bgy.com.cn
+// @namespace   Violentmonkey Scripts
+// @match       https://xswp.bgy.com.cn/Office/WebOffice/Document.aspx
+// @match       https://xsbpm.bgy.com.cn/DyBpm/Demo_BPM/MyApprDetail.aspx
+// @match       https://xswp.bgy.com.cn/Office/OfflineMedia/DocumentChangePic.aspx
+// @match       https://xsbpm.bgy.com.cn/DyBpm/Demo_BPM/MyFlowDetail.aspx
+// @match       https://xswp.bgy.com.cn/Office/OfflineMedia/DocumentOutCompanyPay.aspx
+// @grant       none
+// @version     1.0
+// @author      -
+// @description 6/28/2020, 8:06:06 AM
+// ==/UserScript==
+function parentNodesTimes(node,times) {
+    if (times===1){
+        return node.parentNode;
+    }
+    else return parentNodesTimes(node.parentNode,times-1);
+}
+function ai(){
+    // const down = document.querySelectorAll('*[id^="download"]');
+    // let itemsNum=down.length;
+    // if (itemsNum>0){
+    //     let i=0;
+    //     while (i<itemsNum){
+    //         console.log(down[i].href);
+    //         window.open(down[i].href,'_blank')
+    //         i=i+1;
+    //     }
+    // }
+    let downloadLinks=[];
+    const as = document.getElementsByTagName("a");
+    for (let i=0;i<as.length;i++){
+        if (as[i].innerText==="下载"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="流程说明"){
+            downloadLinks.push(as[i]);
+            console.log(i);
+        }
+    }
+    if (downloadLinks.length===0){
+        window.alert("未发现下载按钮");
+    }
+    else {
+        let sentence='是否下载'+downloadLinks.length;
+        let r = confirm(sentence);
+        if (r === true) {
+            for (let i=0;i<downloadLinks.length;i++){
+                console.log(downloadLinks[i].href);
+                // window.open(downloadLinks[i].href,'_blank');
+                downloadLinks[i].click();
+            }
+        }
+    }
+
+    // console.log(downloadLinks);
+
+}
+
+window.onload=function () {
+    let b=setTimeout(function () {
+        ai();
+    },5000);
+}
