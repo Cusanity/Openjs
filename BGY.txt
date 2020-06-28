@@ -11,6 +11,19 @@
 // @author      -
 // @description 6/28/2020, 8:06:06 AM
 // ==/UserScript==
+function NodeBeforeDownload(node) {
+    if(node.parentNode.innerText.search("下载")!==-1){
+        return node.parentNode;
+    }
+    else return NodeBeforeDownload(node.parentNode);
+}
+function textBeforeDownload(node) {
+    let str=node.innerText;
+    let downNum=str.indexOf("下载");
+    return str.slice(0,downNum);
+}
+
+
 function parentNodesTimes(node,times) {
     if (times===1){
         return node.parentNode;
@@ -28,12 +41,22 @@ function ai(){
     //         i=i+1;
     //     }
     // }
+    let allNames="test:";
     let downloadLinks=[];
     const as = document.getElementsByTagName("a");
     for (let i=0;i<as.length;i++){
         if (as[i].innerText==="下载"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="流程说明"){
-            downloadLinks.push(as[i]);
-            console.log(i);
+            let currentText=textBeforeDownload(NodeBeforeDownload(as[i]));
+            // console.log(currentText);
+            // console.log(allNames);
+            // console.log(allNames.search(currentText));
+            if (allNames.indexOf(currentText)===-1){
+                console.log(allNames.indexOf(currentText));
+                allNames+=textBeforeDownload(NodeBeforeDownload(as[i]))+" ";
+                console.log(allNames);
+                downloadLinks.push(as[i]);
+                console.log(i);
+            }
         }
     }
     if (downloadLinks.length===0){
@@ -45,6 +68,7 @@ function ai(){
         if (r === true) {
             for (let i=0;i<downloadLinks.length;i++){
                 console.log(downloadLinks[i].href);
+                console.log(textBeforeDownload(NodeBeforeDownload(downloadLinks[i])));
                 // window.open(downloadLinks[i].href,'_blank');
                 downloadLinks[i].click();
             }
@@ -54,9 +78,12 @@ function ai(){
     // console.log(downloadLinks);
 
 }
-
-window.onload=function () {
-    let b=setTimeout(function () {
-        ai();
-    },5000);
+function keyDown(e) {
+    var keycode = e.which;
+    var realkey = String.fromCharCode(e.which);
+    switch (keycode) {
+        case 68:
+            ai();
+    }
 }
+document.onkeydown = keyDown;
