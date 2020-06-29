@@ -45,7 +45,7 @@ function ai(){
     let allNames="";
     const as = document.getElementsByTagName("a");
     for (let i=0;i<as.length;i++){
-        if (as[i].innerText==="下载"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="流程说明"){
+        if (as[i].innerText==="下载"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="指引文件"&&parentNodesTimes(as[i],10).childNodes[0].innerText!=="流程说明"){
             let currentText=textBeforeDownload(NodeBeforeDownload(as[i]));
             // console.log(currentText);
             // console.log(allNames);
@@ -87,3 +87,4 @@ function keyDown(e) {
     }
 }
 document.onkeydown = keyDown;
+
